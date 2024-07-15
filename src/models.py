@@ -1,11 +1,15 @@
 import os
 import sys
-from sqlalchemy import Column, ForeignKey, Integer, String, Boolean
+from sqlalchemy import Column, ForeignKey, Integer, String, Boolean, Enum as SqlEnum
 from sqlalchemy.orm import relationship, declarative_base
-
 from eralchemy2 import render_er
+from enum import Enum as PyEnum
 
 Base = declarative_base()
+
+class UserRole(PyEnum):
+    ADMIN = 'admin'
+    USER = 'user'
 
 class User(Base):
     __tablename__ = 'user'
@@ -16,6 +20,7 @@ class User(Base):
     first_name = Column(String(250), nullable=False)
     last_name = Column(String(250), nullable=False)
     is_banned = Column(Boolean, default=False)
+    role = Column(SqlEnum(UserRole), default=UserRole.USER, nullable=False)
 
 
 class Character(Base):
